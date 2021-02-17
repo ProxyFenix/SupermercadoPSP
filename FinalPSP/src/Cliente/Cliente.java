@@ -3,6 +3,7 @@ package Cliente;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Scanner;
@@ -11,20 +12,30 @@ public class Cliente {
 
 	public static void main(String[] args) throws UnknownHostException, IOException {
 
+		var client = new Cliente();
+		System.out.println("Cliente encendido.");
+		client.run();
+
+	}
+
+	private static void run() throws IOException {
 		String host = "localhost";
 		int puerto = 59001;
 		Socket clienteSoc = new Socket(host, puerto);
-		DataOutputStream flujoSalida = new DataOutputStream(clienteSoc.getOutputStream());
-
-		System.out.println("Cliente encendido.");
 		Scanner sc = new Scanner(System.in);
+		DataOutputStream flujoSalida = new DataOutputStream(clienteSoc.getOutputStream());
 		System.out.println("Introduce tu id de empleado");
 		int id = sc.nextInt();
 		// Con esto mandamos un mensaje al chervidor digo servidor
 		flujoSalida.writeUTF("LOGIN;[" + id + "]");
 		// Y con esto, lo recibimos
 		DataInputStream flujoEntrada = new DataInputStream(clienteSoc.getInputStream());
-
+		ObjectInputStream objetoEntrada = new ObjectInputStream(clienteSoc.getInputStream());
+		try {
+			System.out.println(objetoEntrada.readObject().toString());
+		} catch (ClassNotFoundException | IOException e1) {
+			e1.printStackTrace();
+		}
 		if (flujoEntrada.readUTF().equals("Empleado devuelto.")) {
 			System.out.println("Elija qué desea hacer, por favor./n" + "Pulse 1 para tratar la compra más reciente./n"
 					+ "Pulse 2 para obtener el total de beneficio del día./n" + "Pulse 3 para salir.");
