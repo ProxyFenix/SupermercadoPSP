@@ -1,9 +1,14 @@
 package Model;
 
+import java.io.Serializable;
 import java.sql.Date;
 import java.sql.Timestamp;
 
-public class Empleado {
+public class Empleado implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private int idEmpleado;
 	private Timestamp ultimaSesion;
 	private Date fechaContratacion;
