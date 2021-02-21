@@ -79,5 +79,24 @@ public class CompraDAO {
 			e.printStackTrace();
 		}
 	}
+	
+	public int calcularCajaDia(int idEmpleado) {
+		int total = 0;
+		try {
+			cn = conexion.conectar();
+			stm = cn.createStatement();
+			String query = "select SUM((precio_venta - precio_proveedor) * cantidad_producto) as Resultado from compra,producto where "
+					+ "compra.id_producto=producto.id_producto and "
+					+ "id_empleado=" + idEmpleado;
+			rs = stm.executeQuery(query);
+			
+			while (rs.next()) {
+				total = rs.getInt("Resultado");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return total;
+	}
 
 }

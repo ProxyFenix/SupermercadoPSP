@@ -72,11 +72,11 @@ public class Manipulahilos implements Runnable {
 						String[] arrayString = fEntr.split(";", 3);
 						/*
 						 * arrayString[0] equivaldría a "CAJA"
-						 * arrayString[1] equivaldría al numero de compra tras el primer ";"
+						 * arrayString[1] equivaldría al numero de empleado tras el primer ";"
 						 */
-						int numeroCompra = Integer.parseInt(arrayString[1].toString());
+						int numeroEmpleado = Integer.parseInt(arrayString[1].toString());
 						pw.println("CAJA");
-						int total = obtenerCajaDia(numeroCompra);
+						int total = obtenerCajaDia(numeroEmpleado);
 						flujoSalida.writeInt(total);
 					}
 				}
@@ -155,13 +155,9 @@ public class Manipulahilos implements Runnable {
 	 * @param numeroCompra
 	 * @return
 	 */
-	private int obtenerCajaDia(int numeroCompra) {
+	private int obtenerCajaDia(int numeroEmpleado) {
 		int total = 0;
-		compra = compraDao.pillarDatosConcretosPorID(numeroCompra);
-		if (product.getIdProducto() == compra.getIdProductoFK()) {
-			total = (product.getPrecioVenta() - product.getPrecioProveedor()) * compra.getCantidadStockFK();
-			return total;
-		}
+		total = compraDao.calcularCajaDia(numeroEmpleado);
 		return total;
 	}
 }
