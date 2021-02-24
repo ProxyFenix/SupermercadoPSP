@@ -72,7 +72,7 @@ public class Cliente {
 				System.out.println("Introduzca el id de la compra: ");
 				int idCompra = sc.nextInt();
 				do {
-					System.out.println("Error, id incorrecto. Pruebe de nuevo.");
+					System.out.println("Error, id incorrecto o ninguna compra efectuada durante el día de hoy. Pruebe de nuevo.");
 					idCompra = sc.nextInt();
 				} while (idCompra <= 0);
 				flujoSalida.writeUTF("CAJA;" + idCompra);

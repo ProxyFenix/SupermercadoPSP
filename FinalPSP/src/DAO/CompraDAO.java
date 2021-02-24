@@ -1,11 +1,13 @@
 package DAO;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 import Model.Compra;
@@ -81,13 +83,15 @@ public class CompraDAO {
 	}
 	
 	public int calcularCajaDia(int idEmpleado) {
+		LocalDate dia = LocalDate.now();
+		String diaString = dia.toString();
 		int total = 0;
 		try {
 			cn = conexion.conectar();
 			stm = cn.createStatement();
 			String query = "select SUM((precio_venta - precio_proveedor) * cantidad_producto) as Resultado from compra,producto where "
 					+ "compra.id_producto=producto.id_producto and "
-					+ "id_empleado=" + idEmpleado;
+					+ "id_empleado=" + idEmpleado + " and fecha.compra like '%" + diaString + "%'";
 			rs = stm.executeQuery(query);
 			
 			while (rs.next()) {
