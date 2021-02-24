@@ -76,11 +76,11 @@ public class CompraDAO {
 			st.setInt(2, idProducto);
 			st.setInt(3, cantidadProducto);
 			st.setInt(4, idEmpleado);
-			
+			st.executeUpdate(query);
 			String queryUpd = "UPDATE producto SET cantidad_stock = "
                     + "(cantidad_stock - " + cantidadProducto + ") "
                     + "WHERE id_producto = " + idProducto; 
-			st.executeUpdate();
+			st.executeUpdate(queryUpd);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
