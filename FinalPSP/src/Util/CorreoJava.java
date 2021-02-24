@@ -32,7 +32,7 @@ public class CorreoJava {
 		String finalToUser = "";
 		String firstToUser = "";
 
-		URL resource = getClass().getResource("correo.xml");
+		URL resource = getClass().getResource("App.config");
 		File correoXML = new File(resource.getPath());
 		System.out.println(correoXML);
 
