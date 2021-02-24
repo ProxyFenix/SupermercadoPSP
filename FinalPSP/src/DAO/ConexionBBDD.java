@@ -6,7 +6,7 @@ import java.sql.SQLException;
 
 public class ConexionBBDD {
     private static final String CONTROLADOR = "com.mysql.jdbc.Driver";
-    private static final String URL = "jdbc:mysql://localhost:3306/superbbdd?useSSL=false";
+    private static final String URL = "jdbc:mysql://localhost:3306/superbbdd?allowPublicKeyRetrieval=true&useSSL=false";
     private static final String USUARIO = "root";
     private static final String CLAVE = "root";
     

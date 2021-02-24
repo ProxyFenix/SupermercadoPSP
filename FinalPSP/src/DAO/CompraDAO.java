@@ -23,29 +23,28 @@ public class CompraDAO {
 	
 	static Compra compra;
 
-	public Compra pillarDatosConcretosPorFK(int idEmpleado, int idProducto) {
-		compra = null;
+	public Compra pillarDatosConcretosPorFK(int idProducto) {
+		Compra compraN = null;
 		try {
 
 			cn = conexion.conectar();
 			stm = cn.createStatement();
 			String query = "select id_compra,fecha,id_producto,cantidad_producto,id_empleado from compra where "
-					+ "id_producto=" + idProducto + " and id_empleado=" + idEmpleado;
+					+ "id_producto=" + idProducto;
 			rs = stm.executeQuery(query);
 
 			while (rs.next()) {
-				compra = new Compra(rs.getInt("id_compra"), rs.getTimestamp("fecha"), rs.getInt("id_producto"),
+				compraN = new Compra(rs.getInt("id_compra"), rs.getTimestamp("fecha"), rs.getInt("id_producto"),
 						rs.getInt("cantidad_producto"), rs.getInt("id_empleado"));
-				return compra;
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return compra;
+		return compraN;
 	}
 	
 	public Compra pillarDatosConcretosPorID(int idCompra) {
-		compra = null;
+		Compra compraN = null;
 		try {
 
 			cn = conexion.conectar();
@@ -55,28 +54,24 @@ public class CompraDAO {
 			rs = stm.executeQuery(query);
 
 			while (rs.next()) {
-				compra = new Compra(rs.getInt("id_compra"), rs.getTimestamp("fecha"), rs.getInt("id_producto"),
+				compraN = new Compra(rs.getInt("id_compra"), rs.getTimestamp("fecha"), rs.getInt("id_producto"),
 						rs.getInt("cantidad_producto"), rs.getInt("id_empleado"));
-				return compra;
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return compra;
+		return compraN;
 	}
 
 	public void insertarCompra(Timestamp fecha, int idProducto, int cantidadProducto, int idEmpleado) {
 
 		try {
 			cn = conexion.conectar();
-			String query = "insert into compras (id_compra,fecha,id_producto,cantidad_producto,id_empleado) "
-					+ "values (0,?,?,?,?)";
+			String query = "insert into compra (fecha,id_producto,cantidad_producto,id_empleado) "
+					+ "values ('" + fecha + "'," + idProducto + "," + cantidadProducto + ", " + idEmpleado + ")";
 			st = cn.prepareStatement(query, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
-			st.setTimestamp(1, fecha);
-			st.setInt(2, idProducto);
-			st.setInt(3, cantidadProducto);
-			st.setInt(4, idEmpleado);
 			st.executeUpdate(query);
+			
 			String queryUpd = "UPDATE producto SET cantidad_stock = "
                     + "(cantidad_stock - " + cantidadProducto + ") "
                     + "WHERE id_producto = " + idProducto; 

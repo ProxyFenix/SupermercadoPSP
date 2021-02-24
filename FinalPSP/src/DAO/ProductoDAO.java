@@ -17,22 +17,21 @@ public class ProductoDAO {
 	static Producto product;
 
 	public Producto pillarDatos(int idProducto) {
-		product = null;
+		Producto productN = null;
 		try {
 
 			cn = conexion.conectar();
 			stm = cn.createStatement();
-			String query = "select id_producto,nombre_producto,precio_venta,precio_proveedor,cantidad_stock from productos where id_producto=" + idProducto;
+			String query = "select id_producto,nombre_producto,precio_venta,precio_proveedor,cantidad_stock from producto where id_producto=" + idProducto;
 			rs = stm.executeQuery(query);
 
 			while (rs.next()) {
-				product = new Producto(rs.getInt("id_producto"), rs.getString("nombre_producto"), rs.getInt("precio_venta"),
+				productN = new Producto(rs.getInt("id_producto"), rs.getString("nombre_producto"), rs.getInt("precio_venta"),
 						rs.getInt("precio_proveedor"), rs.getInt("cantidad_stock"));
-				return product;
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return product;
+		return productN;
 	}
 }

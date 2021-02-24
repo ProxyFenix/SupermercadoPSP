@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Properties;
 import javax.mail.*;
@@ -63,13 +62,13 @@ public class CorreoJava {
 		}
 
 		// Get the session object
-		Properties properties = System.getProperties();
-		properties.put("mail.smtp.host", "smtp.gmail.com");
-		properties.put("mail.smtp.port", host);
-		properties.put("mail.smtp.auth", "true");
-		properties.put("mail.smtp.socketFactory.port", host);
-		properties.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
-		Session session = Session.getDefaultInstance(properties, new javax.mail.Authenticator() {
+		Properties propiedades = new Properties();
+		propiedades.put("mail.smtp.host", "smtp.gmail.com");
+		propiedades.put("mail.smtp.port", "465");
+		propiedades.put("mail.smtp.auth", "true");
+		propiedades.put("mail.smtp.socketFactory.port", "465");
+		propiedades.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+		Session session = Session.getDefaultInstance(propiedades, new javax.mail.Authenticator() {
 			protected PasswordAuthentication getPasswordAuthentication() {
 				return new PasswordAuthentication(user, passwd);
 			}
@@ -81,13 +80,13 @@ public class CorreoJava {
 			message.addRecipient(Message.RecipientType.TO, new InternetAddress(finalToUser));
 			message.setSubject("Falta de producto" + nombreProducto);
 			message.setText("El producto" + nombreProducto + "ha acabado sus existencias a las " + hora
-					+ ". El precio por el cual se adquiriÃ³ a su empresa fue de " + precioProveedor + " bitcoins.");
+					+ ". El precio por el cual se adquirió a su empresa fue de " + precioProveedor + " bitcoins.");
 
 			// send the message
 			Transport.send(message);
 			System.out.println(message.toString());
 			System.out.println("message sent successfully...");
-
+			return;
 		} catch (MessagingException e) {
 			e.printStackTrace();
 		}

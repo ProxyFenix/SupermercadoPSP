@@ -43,4 +43,10 @@ public class Empleado implements Serializable {
 	public void setFechaContratacion(Date fechaContratacion) {
 		this.fechaContratacion = fechaContratacion;
 	}		
+	
+	public String toString() {
+		String linea = "";
+		linea = "El empleado de id: " + idEmpleado + " cuya última conexión fue el " + ultimaSesion.toString() + "y que fue contratado el " + fechaContratacion + ".\n";
+		return linea;
+	}
 }
