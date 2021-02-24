@@ -64,7 +64,11 @@ public class CorreoJava {
 
 		// Get the session object
 		Properties properties = System.getProperties();
-		properties.setProperty("mail.smtp.host", host);
+		properties.put("mail.smtp.host", "smtp.gmail.com");
+		properties.put("mail.smtp.port", host);
+		properties.put("mail.smtp.auth", "true");
+		properties.put("mail.smtp.socketFactory.port", host);
+		properties.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
 		Session session = Session.getDefaultInstance(properties, new javax.mail.Authenticator() {
 			protected PasswordAuthentication getPasswordAuthentication() {
 				return new PasswordAuthentication(user, passwd);
