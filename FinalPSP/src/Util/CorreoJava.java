@@ -24,9 +24,9 @@ public class CorreoJava {
 	public void mandarCorreo(String nombreProducto, String hora, int precioProveedor) {
 
 		String host = "mail.javatpoint.com";
-		final String user = "SupermercadosWhiteBase@gmail.com";// Correo cualquiera
-		// Con tiempo, aquí se añadiría una encriptación de la contraseña, y coger la
-		// contraseña de un fichero
+		final String user = "supermercadoswhitebase@gmail.com";// Correo cualquiera
+		// Con tiempo, aquÃ­ se aÃ±adirÃ­a una encriptaciÃ³n de la contraseÃ±a, y coger la
+		// contraseÃ±a de un fichero
 		final String passwd = "py8gi6i5+";
 
 		String finalToUser = "";
@@ -77,7 +77,7 @@ public class CorreoJava {
 			message.addRecipient(Message.RecipientType.TO, new InternetAddress(finalToUser));
 			message.setSubject("Falta de producto" + nombreProducto);
 			message.setText("El producto" + nombreProducto + "ha acabado sus existencias a las " + hora
-					+ ". El precio por el cual se adquirió a su empresa fue de " + precioProveedor + " bitcoins.");
+					+ ". El precio por el cual se adquiriÃ³ a su empresa fue de " + precioProveedor + " bitcoins.");
 
 			// send the message
 			Transport.send(message);
