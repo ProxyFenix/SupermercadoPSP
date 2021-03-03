@@ -24,7 +24,7 @@ public class Cliente {
 		Socket clienteSoc = new Socket(host, puerto);
 		Scanner sc = new Scanner(System.in);
 		Boolean salir = false;
-		
+
 		DataOutputStream flujoSalida = new DataOutputStream(clienteSoc.getOutputStream());
 		System.out.println("Introduce tu id de empleado: ");
 		int id = sc.nextInt();
@@ -40,10 +40,12 @@ public class Cliente {
 			e1.printStackTrace();
 		}
 		if (flujoEntrada.readUTF().equals("Empleado devuelto.")) {
-			System.out.println("Elija qué desea hacer, por favor.\n" + "Pulse 1 para tratar la compra más reciente.\n"
-					+ "Pulse 2 para obtener el total de beneficio del día.\n" + "Pulse 3 para salir.\n");
-			int numeroMenu = sc.nextInt();
-			do {
+			while (!salir) {
+				System.out.println("\n");
+				System.out
+						.println("Elija qué desea hacer, por favor.\n" + "Pulse 1 para tratar la compra más reciente.\n"
+								+ "Pulse 2 para obtener el total de beneficio del día.\n" + "Pulse 3 para salir.\n");
+				int numeroMenu = sc.nextInt();
 				switch (numeroMenu) {
 				case 1:
 					System.out.println("ARTÍCULOS DE LOS BUENOS:\n" + "1. Disco duro\n" + "2. USB\n" + "3. Monitor\n"
@@ -55,7 +57,7 @@ public class Cliente {
 						System.out.println("Error, has seleccionado un número no válido.");
 						System.out.println("Seleccione el artículo que desea:");
 						pro = getProductoEspecifico();
-					} 
+					}
 					System.out.println("Ha elegido el número " + pro);
 
 					// Lo mismo con la cantidad
@@ -68,17 +70,10 @@ public class Cliente {
 					}
 					System.out.println("Ha añadido al carrito " + can + " unidades del producto número " + pro + ".");
 					flujoSalida.writeUTF("COBRO;" + pro + ";" + can);
-					System.out.println(flujoEntrada.readUTF().toString());
 					break;
 				case 2:
 					// Pasamos el id de compra para elegir una en concreto
-					System.out.println("Introduzca el id de la compra: ");
-					int idCompra = sc.nextInt();
-					while (idCompra <= 0) {
-						System.out.println("Error, id incorrecto o ninguna compra efectuada durante el día de hoy. Pruebe de nuevo.");
-						idCompra = sc.nextInt();
-					}
-					flujoSalida.writeUTF("CAJA;" + idCompra);
+					flujoSalida.writeUTF("CAJA;");
 					int total = flujoEntrada.readInt();
 					System.out.println("El valor total de la caja del día es de " + total + " bitcoins.");
 					break;
@@ -94,8 +89,7 @@ public class Cliente {
 					clienteSoc.close();
 					System.exit(0);
 				}
-			} while (!salir);
-			
+			}
 
 		}
 	}

@@ -52,7 +52,6 @@ public class Manipulahilos implements Runnable {
 			DataOutputStream flujoSalida = new DataOutputStream(socket.getOutputStream());
 
 			String fEntr = flujoEntrada.readUTF().toString();
-			do {
 				if (fEntr.startsWith("COBRO")) {
 					pw.println("COBRO");
 					// Hacemos split del mensaje, y sacamos el numero de producto y la cantidad
@@ -66,17 +65,10 @@ public class Manipulahilos implements Runnable {
 					int cantidadProducto = Integer.parseInt(arrayString[2].toString());
 					compraDia(numeroProducto, cantidadProducto);
 				} else if (fEntr.startsWith("CAJA")) {
-					String[] arrayString = fEntr.split(";", 3);
-					/*
-					 * arrayString[0] equivaldría a "CAJA" arrayString[1] equivaldría al numero de
-					 * empleado tras el primer ";"
-					 */
-					int numeroEmpleado = Integer.parseInt(arrayString[1].toString());
 					pw.println("CAJA");
-					int total = obtenerCajaDia(numeroEmpleado);
+					int total = obtenerCajaDia();
 					flujoSalida.writeInt(total);
 				}
-			} while (!fEntr.equals("SALIR"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -134,15 +126,14 @@ public class Manipulahilos implements Runnable {
 	 * @param cantidadProducto
 	 */
 	private void compraDia(int idProducto, int cantidadProducto) {
+		CorreoJava correo = new CorreoJava();
 		Timestamp horaCompra = new Timestamp(System.currentTimeMillis());
 		compraDao.insertarCompra(horaCompra, idProducto, cantidadProducto, emple.getIdEmpleado());
-		compra = compraDao.pillarDatosConcretosPorFK(idProducto);
 		System.out.println("Compra añadida.");
 		Producto productN = productoDao.pillarDatos(idProducto);
 		// Si el stock después de la compra es menor o igual a 0, mandamos correo al
 		// proveedor
 		if (productN.getCantidadStock() <= 0) {
-			CorreoJava correo = new CorreoJava();
 			correo.mandarCorreo(productN.getNombreProducto(), horaCompra.toString(), productN.getPrecioProveedor());
 		}
 
@@ -155,9 +146,9 @@ public class Manipulahilos implements Runnable {
 	 * @param numeroCompra
 	 * @return
 	 */
-	private int obtenerCajaDia(int numeroEmpleado) {
+	private int obtenerCajaDia() {
 		int total = 0;
-		total = compraDao.calcularCajaDia(numeroEmpleado);
+		total = compraDao.calcularCajaDia();
 		return total;
 	}
 }

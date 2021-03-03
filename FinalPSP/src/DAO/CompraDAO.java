@@ -72,34 +72,43 @@ public class CompraDAO {
 			st = cn.prepareStatement(query, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
 			st.executeUpdate(query);
 			
-			String queryUpd = "UPDATE producto SET cantidad_stock = "
-                    + "(cantidad_stock - " + cantidadProducto + ") "
-                    + "WHERE id_producto = " + idProducto; 
-			st.executeUpdate(queryUpd);
+			updatearCompra(idProducto,cantidadProducto);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
 	
-	public int calcularCajaDia(int idEmpleado) {
-		LocalDate dia = LocalDate.now();
-		String diaString = dia.toString();
+	public int calcularCajaDia() {
 		int total = 0;
 		try {
+			LocalDate dia = LocalDate.now();
+			String diaString = dia.toString();
+			System.out.println(diaString);
 			cn = conexion.conectar();
 			stm = cn.createStatement();
-			String query = "select SUM((precio_venta - precio_proveedor) * cantidad_producto) as Resultado from compra,producto where "
-					+ "compra.id_producto=producto.id_producto and "
-					+ "id_empleado=" + idEmpleado + " and fecha.compra like '%" + diaString + "%'";
+			String query = "select ((producto.precio_venta - producto.precio_proveedor) * compra.cantidad_producto) as Resultado from compra,producto where "
+					+ "compra.fecha LIKE '" + diaString + "'";
 			rs = stm.executeQuery(query);
 			
 			while (rs.next()) {
-				total = rs.getInt("Resultado");
+				total = total + rs.getInt("Resultado");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return total;
+	}
+	
+	private void updatearCompra(int idProducto, int cantidadProducto) {
+		String queryUpd = "UPDATE producto SET cantidad_stock = "
+                + "(cantidad_stock - " + cantidadProducto + ") "
+                + "WHERE id_producto = " + idProducto; 
+		try {
+			st.executeUpdate(queryUpd);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 }
